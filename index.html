@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart School Room Booking</title>
+
+<style>
+
+/* GLOBAL FIX */
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:linear-gradient(180deg,#061a3a,#0a1f44);
+    color:white;
+}
+
+/* CONTAINER */
+.container{
+    width:92%;
+    max-width:520px;
+    margin:20px auto;
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+/* FORM CARD */
+.card-form{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    padding:15px;
+    border-radius:15px;
+}
+
+/* UNIFORM BOX SIZE */
+input, select, button{
+    width:100%;
+    height:45px;
+    margin:8px 0;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    font-size:14px;
+}
+
+/* BUTTON */
+button{
+    background:#1e90ff;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#4aa3ff;
+}
+
+/* BOOKING CARD */
+.booking{
+    background:rgba(255,255,255,0.1);
+    margin-top:10px;
+    padding:12px;
+    border-radius:12px;
+    border-left:4px solid #1e90ff;
+
+    min-height:90px;
+}
+
+/* TEXT STYLE */
+.booking b{
+    display:block;
+    margin-bottom:3px;
+}
+
+.status{
+    display:inline-block;
+    margin-top:5px;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:12px;
+    background:red;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">🏫 Smart Room Booking System</div>
+
+    <div class="card-form">
+
+        <input type="text" id="teacher" placeholder="Teacher Name">
+
+        <select id="room">
+            <option>Science Lab</option>
+            <option>Computer Lab</option>
+            <option>Meeting Room</option>
+            <option>Library</option>
+            <option>Physics Lab</option>
+            <option>Chemistry Lab</option>
+            <option>Biology Lab</option>
+            <option>Music Room</option>
+            <option>Art Room</option>
+            <option>Lecture Hall</option>
+            <option>Robotics Lab</option>
+            <option>Language Room</option>
+        </select>
+
+        <input type="date" id="date">
+        <input type="time" id="time">
+
+        <button onclick="book()">BOOK NOW</button>
+
+    </div>
+
+    <div id="list"></div>
+
+</div>
+
+<script>
+
+let bookings = [];
+
+function book(){
+
+    let teacher = document.getElementById("teacher").value;
+    let room = document.getElementById("room").value;
+    let date = document.getElementById("date").value;
+    let time = document.getElementById("time").value;
+
+    if(!teacher || !date || !time){
+        alert("Please fill all fields!");
+        return;
+    }
+
+    // prevent double booking
+    let exists = bookings.find(b => 
+        b.room === room && b.date === date && b.time === time
+    );
+
+    if(exists){
+        alert("⚠ Room already booked at this time!");
+        return;
+    }
+
+    bookings.push({teacher, room, date, time});
+
+    let div = document.createElement("div");
+    div.className = "booking";
+
+    div.innerHTML = `
+        👩‍🏫 <b>${teacher}</b>
+        🏫 ${room}<br>
+        📅 ${date} | ⏰ ${time}<br>
+        <span class="status">BOOKED</span>
+    `;
+
+    document.getElementById("list").appendChild(div);
+
+    // sound effect
+    let audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+    audio.play();
+
+    // reset form
+    document.getElementById("teacher").value="";
+    document.getElementById("date").value="";
+    document.getElementById("time").value="";
+}
+
+</script>
+
+</body>
+</html>
